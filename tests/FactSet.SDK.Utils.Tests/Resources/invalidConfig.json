@@ -1,0 +1,21 @@
+{
+  "client name": "testName",
+  "confid": "testid",
+  "list of owners": [
+    "owner1"
+  ],
+  "jwk": {
+    "kty": "testKty",
+    "use": "testUse",
+    "alg": "testAlg",
+    "kid": "testKid",
+    "d": "testD",
+    "n": "testN",
+    "e": "testE",
+    "p": "testP",
+    "q": "testQ",
+    "dp": "testDP",
+    "dq": "testDQ",
+    "qi": "testQI"
+  }
+}

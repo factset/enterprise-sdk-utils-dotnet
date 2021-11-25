@@ -1,0 +1,8 @@
+{
+  "name": "testName",
+  "clientId": "testClientId",
+  "clientAuthType": "testClientAuthType",
+  "owners": [
+    "owner1"
+  ]
+}

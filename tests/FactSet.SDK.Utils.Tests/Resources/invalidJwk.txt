@@ -1,0 +1,19 @@
+{
+  "name": "testName",
+  "clientId": "testClientId",
+  "clientAuthType": "testClientAuthType",
+  "owners": [
+    "owner1"
+  ],
+  "jwk": {
+    "kid": "testKty",
+    "d": "testD",
+    "n": "testN",
+    "e": "testE",
+    "p": "testP",
+    "q": "testQ",
+    "dp": "testDP",
+    "dq": "testDQ",
+    "qi": "testQI"
+  }
+}
