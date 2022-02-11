@@ -39,7 +39,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using FactSet.SDK.Utils.Authentication;
 
-namespace Console
+namespace Example
 {
     static class Program
     {
