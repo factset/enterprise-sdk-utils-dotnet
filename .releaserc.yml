@@ -1,0 +1,15 @@
+plugins:
+  - - '@semantic-release/commit-analyzer'
+    - preset: conventionalcommits
+  - - '@semantic-release/release-notes-generator'
+    - preset: conventionalcommits
+  - - '@semantic-release/changelog'
+    - changelogTitle: '# FactSet SDK Utilities for .NET Changelog'
+  - - semantic-release-dotnet
+    - paths:
+        - '**/*.csproj'
+  - - '@semantic-release/git'
+    - assets:
+        - CHANGELOG.md
+        - '**/*.csproj'
+  - '@semantic-release/github'
