@@ -24,8 +24,13 @@ jobs:
         with:
           dotnet-version: '5.x'
 
+      - name: Install Dependencies
+        run: |
+          dotnet restore
+          dotnet tool restore
+
       - name: Build
-        run: dotnet build --configuration Release
+        run: dotnet build --configuration Release --no-restore
 
       - name: Lint
         run: dotnet format --check
@@ -34,23 +39,4 @@ jobs:
         run:  dotnet test --configuration Release --no-build --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
 
       - name: Package
-        run: dotnet pack --configuration Release
-
-  test:
-    name: Test
-    runs-on: ubuntu-20.04
-    strategy:
-      matrix:
-        dotnet-version: ['5.x', '6.x']
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: ${{ matrix.dotnet-version }}
-
-      - name: Test
-        run:  dotnet test --configuration Release
+        run: dotnet pack --configuration Release --no-build
