@@ -1,0 +1,30 @@
+name: Publish
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  deploy:
+    name: Deploy to package index
+    runs-on: ubuntu-20.04
+    env:
+      API_KEY: ${{ secrets.NUGET_API_KEY }}
+      SOURCE_URL: ${{ secrets.NUGET_PUBLISH_URL }}
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+      DOTNET_NOLOGO: true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '5.x'
+
+      - name: Package
+        run: dotnet pack --configuration Release
+
+      - name: Publish
+        run: dotnet nuget push --source $SOURCE_URL --api-key $API_KEY **/*.nupkg
