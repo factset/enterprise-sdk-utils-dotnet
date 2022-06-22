@@ -22,7 +22,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: '5.x'
+          dotnet-version: '6.x'
 
       - name: Install Dependencies
         run: |
@@ -33,7 +33,7 @@ jobs:
         run: dotnet build --configuration Release --no-restore
 
       - name: Lint
-        run: dotnet format --check
+        run: dotnet format --verify-no-changes
 
       - name: Test
         run:  dotnet test --configuration Release --no-build --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
