@@ -45,6 +45,7 @@ namespace Example
     {
         static async Task Main(string[] args)
         {
+            // The ConfidentialClient instance should be reused in production environments.
             ConfidentialClient confidentialClient = await ConfidentialClient.CreateAsync("./path/to/config.json");
             string token = await confidentialClient.GetAccessTokenAsync();
 
@@ -77,6 +78,7 @@ Each helper class in the module has the following features:
 * Accepts a `Configuration` instance that contains information about the OAuth 2.0 client, including the client ID and private key.
 * Performs authentication with FactSet's OAuth 2.0 authorization server and retrieves an access token.
 * Caches the access token for reuse and requests a new access token as needed when one expires.
+    * In order for this to work correctly, the helper class instance should be reused in production environments.
 
 #### Configuration
 
