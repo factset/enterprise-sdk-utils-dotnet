@@ -22,7 +22,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3.0.2
         with:
-          dotnet-version: '5.x'
+          dotnet-version: '6.x'
 
       - name: Install Dependencies
         run: |
