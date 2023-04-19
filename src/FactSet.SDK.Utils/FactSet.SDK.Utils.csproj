@@ -22,7 +22,7 @@
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.29.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Collections.Immutable" Version="7.0.0" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.28.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.29.0" />
     <None Include="../../README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
