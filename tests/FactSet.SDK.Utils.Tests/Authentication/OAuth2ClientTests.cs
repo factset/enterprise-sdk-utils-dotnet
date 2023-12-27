@@ -10,7 +10,7 @@ namespace FactSet.SDK.Utils.Tests.Authentication
         public void OAuth2ClientGoodInstantiation()
         {
             OAuth2ClientCorrect oAuth = new OAuth2ClientCorrect();
-            Assert.IsInstanceOf<OAuth2ClientCorrect>(oAuth);
+            Assert.That(oAuth, Is.InstanceOf<OAuth2ClientCorrect>());
         }
     }
 
