@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using FactSet.SDK.Utils.Authentication;
 using Microsoft.IdentityModel.Tokens;
@@ -12,12 +11,13 @@ namespace FactSet.SDK.Utils.Tests.Authentication
         private string _resourcesPath;
         private string _validJwk;
         private string _invalidJwkMissingKty;
-    
+
         [SetUp]
         public void Setup()
         {
-            _resourcesPath = Path.Join(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.ToString(), "Resources");
-    
+            _resourcesPath = Path.Join(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.ToString(),
+                "Resources");
+
             _validJwk = @"
                 {
                     'kty': 'test',
@@ -33,7 +33,7 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                     'dq': 'test',
                     'qi': 'test'
                 }";
-    
+
             _invalidJwkMissingKty = @"
                 {
                     'use': 'test',
@@ -49,89 +49,90 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                     'qi': 'test'
                 }";
         }
-    
+
         [Test]
         public void Configuration_PassingEverythingNull_ThrowsArgumentException()
         {
             Assert.Throws<ArgumentException>(() => new Configuration(clientId: null,
-                                                                     clientAuthType: null,
-                                                                     jwk: null));
+                clientAuthType: null,
+                jwk: null));
         }
-        
+
         [Test]
         public void Configuration_PassingClientIdNull_ThrowsArgumentException()
         {
             Assert.Throws<ArgumentException>(() => new Configuration(clientId: null,
-                                                                     clientAuthType: "test",
-                                                                     jwk: new JsonWebKey(_validJwk)));
+                clientAuthType: "test",
+                jwk: new JsonWebKey(_validJwk)));
         }
-        
+
         [Test]
         public void Configuration_PassingClientAuthTypeNull_ThrowsArgumentException()
         {
             Assert.Throws<ArgumentException>(() => new Configuration(clientId: "test",
-                                                                     clientAuthType: null,
-                                                                     jwk: new JsonWebKey(_validJwk)));
+                clientAuthType: null,
+                jwk: new JsonWebKey(_validJwk)));
         }
-        
+
         [Test]
         public void Configuration_PassingJwkNull_ThrowsArgumentException()
         {
             JsonWebKey jsonWebKey = null;
             Assert.Throws<ArgumentException>(() => new Configuration(clientId: "test",
-                                                                     clientAuthType: "test",
-                                                                     jwk: jsonWebKey));
+                clientAuthType: "test",
+                jwk: jsonWebKey));
         }
-        
+
         [Test]
         public void Configuration_PassingEmptyAndNull_ThrowsArgumentException()
         {
             Assert.Throws<ArgumentException>(() => new Configuration(clientId: "",
-                                                                     clientAuthType: "",
-                                                                     jwk: null));
+                clientAuthType: "",
+                jwk: null));
         }
-        
+
         [Test]
         public void Configuration_PassingClientIdEmpty_ThrowsArgumentException()
         {
             Assert.Throws<ArgumentException>(() => new Configuration(clientId: "",
-                                                                     clientAuthType: "test",
-                                                                     jwk: new JsonWebKey(_validJwk)));
+                clientAuthType: "test",
+                jwk: new JsonWebKey(_validJwk)));
         }
-        
+
         [Test]
         public void Configuration_PassingClientAuthTypeEmpty_ThrowsArgumentException()
         {
             Assert.Throws<ArgumentException>(() => new Configuration(clientId: "test",
-                                                                     clientAuthType: "",
-                                                                     jwk: new JsonWebKey(_validJwk)));
+                clientAuthType: "",
+                jwk: new JsonWebKey(_validJwk)));
         }
-        
+
         [Test]
         public void Configuration_PassingInvalidJwkMissingKty_ThrowsConfigurationException()
         {
             JsonWebKey jsonWebKey = new(_invalidJwkMissingKty);
             Assert.Throws<ConfigurationException>(() => new Configuration(clientId: "test",
-                                                                          clientAuthType: "test",
-                                                                          jwk: jsonWebKey));
+                clientAuthType: "test",
+                jwk: jsonWebKey));
         }
-        
+
         [Test]
         public void Configuration_PassingMissingJwk_ThrowsConfigurationException()
         {
             JsonWebKey jsonWebKey = new("{}");
             Assert.Throws<ConfigurationException>(() => new Configuration(clientId: "test",
-                                                                          clientAuthType: "test",
-                                                                          jwk: jsonWebKey));
+                clientAuthType: "test",
+                jwk: jsonWebKey));
         }
-        
+
         [Test]
         public void Configuration_PassingValidConfig_InstantiatesConfiguration()
         {
             JsonWebKey jsonWebKey = new(_validJwk);
-            Assert.That(new Configuration(clientId: "test", clientAuthType: "test", jwk: jsonWebKey), Is.InstanceOf<Configuration>());
+            Assert.That(new Configuration(clientId: "test", clientAuthType: "test", jwk: jsonWebKey),
+                Is.InstanceOf<Configuration>());
         }
-        
+
         [Test]
         public void Parse_PassingNullConfigPath_ThrowsConfigurationException()
         {
@@ -145,13 +146,14 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                 Assert.Throws<ArgumentNullException>(() => throw e);
             }
         }
-        
+
         [Test]
         public void Parse_PassingNonExistingFilePath_ThrowsFileNotFoundException()
         {
-            Assert.Throws<FileNotFoundException>(() => Configuration.Parse(Path.Join(_resourcesPath, "somemoretests.txt")));
+            Assert.Throws<FileNotFoundException>(() =>
+                Configuration.Parse(Path.Join(_resourcesPath, "somemoretests.txt")));
         }
-        
+
         [Test]
         public void Parse_PassingConfigFileWithMissingJwkProperties_ThrowsConfigurationException()
         {
@@ -161,11 +163,13 @@ namespace FactSet.SDK.Utils.Tests.Authentication
             }
             catch (Exception e)
             {
-                Assert.That($"JWK must contain the following items: {string.Join(", ", Constants.CONFIG_JWK_REQUIRED_KEYS)}", Is.EqualTo(e.Message));
+                Assert.That(
+                    $"JWK must contain the following items: {string.Join(", ", Constants.CONFIG_JWK_REQUIRED_KEYS)}",
+                    Is.EqualTo(e.Message));
                 Assert.Throws<ConfigurationException>(() => throw e);
             }
         }
-        
+
         [Test]
         public void Parse_PassingConfigFileWithEmptyStringProperties_ThrowsArgumentException()
         {
@@ -179,19 +183,19 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                 Assert.Throws<ArgumentException>(() => throw e);
             }
         }
-        
+
         [Test]
         public void Parse_PassingCorrectConfigFileFormat_ReturnsConfigurationInstance()
         {
             Configuration config = Configuration.Parse(Path.Join(_resourcesPath, "validConfig.json"));
-        
+
             Assert.That(config, Is.InstanceOf<Configuration>());
-        
+
             // Non-Jwk config properties.
             Assert.That("testClientId", Is.EqualTo(config.ClientId));
             Assert.That("testClientAuthType", Is.EqualTo(config.ClientAuthType));
             Assert.That(Constants.FACTSET_WELL_KNOWN_URI, Is.EqualTo(config.WellKnownUri));
-        
+
             // Jwk properties.
             Assert.That("testKty", Is.EqualTo(config.Jwk.Kty));
             Assert.That("testUse", Is.EqualTo(config.Jwk.Use));

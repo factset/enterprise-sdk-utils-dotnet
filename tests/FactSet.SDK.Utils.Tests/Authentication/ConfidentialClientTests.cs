@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -22,7 +21,8 @@ namespace FactSet.SDK.Utils.Tests.Authentication
         [SetUp]
         public void Setup()
         {
-            _resourcesPath = Path.Join(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.ToString(), "Resources");
+            _resourcesPath = Path.Join(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.ToString(),
+                "Resources");
             _testHttpClientEmptyRes = CreateMockHttp(Path.Join(_resourcesPath, "emptyJson.json"));
             _testHttpClientValidRes = CreateMockHttp(Path.Join(_resourcesPath, "exampleResponseWellKnownUri.txt"));
         }
@@ -54,7 +54,7 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                 Assert.Throws<ArgumentNullException>(() => throw e);
             }
         }
-        
+
         [Test]
         public async Task CreateAsync_PassingInvalidConfig_ThrowsArgumentException()
         {
@@ -71,7 +71,7 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                 Assert.Throws<ArgumentException>(() => throw e);
             }
         }
-        
+
         [Test]
         public async Task CreateAsync_PassingInvalidConfigPath_ThrowsDirectoryNotFoundException()
         {
@@ -81,7 +81,7 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                     "somemoretests.txt",
                     httpClient: _testHttpClientEmptyRes
                 );
-        
+
                 // Should fail if no exception is thrown, since that file does not exist.
                 Assert.Fail();
             }
@@ -90,7 +90,7 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                 Assert.Throws<FileNotFoundException>(() => throw e);
             }
         }
-        
+
         [Test]
         public async Task CreateAsync_PassingValidConfigPathNonJsonConfig_ThrowsConfigurationException()
         {
@@ -103,11 +103,12 @@ namespace FactSet.SDK.Utils.Tests.Authentication
             }
             catch (Exception e)
             {
-                Assert.That($"Exception caught when retrieving contents of {Path.Join(_resourcesPath, "badJson.txt")}", Is.EqualTo(e.Message));
+                Assert.That($"Exception caught when retrieving contents of {Path.Join(_resourcesPath, "badJson.txt")}",
+                    Is.EqualTo(e.Message));
                 Assert.Throws<ConfigurationException>(() => throw e);
             }
         }
-        
+
         [Test]
         public async Task CreateAsync_PassingValidConfigPathInvalidConfig_ThrowsArgumentException()
         {
@@ -124,7 +125,7 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                 Assert.Throws<ArgumentException>(() => throw e);
             }
         }
-        
+
         [Test]
         public async Task CreateAsync_PassingMissingJwk_ThrowsArgumentException()
         {
@@ -141,7 +142,7 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                 Assert.Throws<ArgumentException>(() => throw e);
             }
         }
-        
+
         [Test]
         public async Task CreateAsync_PassingInvalidJwk_ThrowsConfigurationException()
         {
@@ -154,11 +155,13 @@ namespace FactSet.SDK.Utils.Tests.Authentication
             }
             catch (Exception e)
             {
-                Assert.That($"JWK must contain the following items: {string.Join(", ", Constants.CONFIG_JWK_REQUIRED_KEYS)}", Is.EqualTo(e.Message));
+                Assert.That(
+                    $"JWK must contain the following items: {string.Join(", ", Constants.CONFIG_JWK_REQUIRED_KEYS)}",
+                    Is.EqualTo(e.Message));
                 Assert.Throws<ConfigurationException>(() => throw e);
             }
         }
-        
+
         [Test]
         public async Task CreateAsync_PassingInvalidJwkEmptyStringValue_ThrowsConfigurationException()
         {
@@ -171,11 +174,13 @@ namespace FactSet.SDK.Utils.Tests.Authentication
             }
             catch (Exception e)
             {
-                Assert.That($"JWK must contain the following items: {string.Join(", ", Constants.CONFIG_JWK_REQUIRED_KEYS)}", Is.EqualTo(e.Message));
+                Assert.That(
+                    $"JWK must contain the following items: {string.Join(", ", Constants.CONFIG_JWK_REQUIRED_KEYS)}",
+                    Is.EqualTo(e.Message));
                 Assert.Throws<ConfigurationException>(() => throw e);
             }
         }
-        
+
         [Test]
         public async Task CreateAsync_PassingConfigInvalidJwkEmptyStringValue_ThrowsConfigurationException()
         {
@@ -203,11 +208,13 @@ namespace FactSet.SDK.Utils.Tests.Authentication
             }
             catch (Exception e)
             {
-                Assert.That($"JWK must contain the following items: {string.Join(", ", Constants.CONFIG_JWK_REQUIRED_KEYS)}", Is.EqualTo(e.Message));
+                Assert.That(
+                    $"JWK must contain the following items: {string.Join(", ", Constants.CONFIG_JWK_REQUIRED_KEYS)}",
+                    Is.EqualTo(e.Message));
                 Assert.Throws<ConfigurationException>(() => throw e);
             }
         }
-        
+
         [Test]
         public async Task CreateAsync_PassingConfigPathEmptyValues_ThrowsArgumentException()
         {
@@ -224,7 +231,7 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                 Assert.Throws<ArgumentException>(() => throw e);
             }
         }
-        
+
         [Test]
         public async Task CreateAsync_PassingInvalidWellKnownUri_ThrowsWellKnownUriException()
         {
@@ -236,9 +243,9 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                     ItExpr.Is<HttpRequestMessage>(r => r.Method == HttpMethod.Get),
                     ItExpr.IsAny<CancellationToken>())
                 .Throws(new Exception());
-        
+
             var testHttpClient = new HttpClient(mockHandlerLocal.Object);
-        
+
             try
             {
                 await ConfidentialClient.CreateAsync(
@@ -248,11 +255,12 @@ namespace FactSet.SDK.Utils.Tests.Authentication
             }
             catch (Exception e)
             {
-                Assert.That($"Error retrieving contents from the well_known_uri: {Constants.FACTSET_WELL_KNOWN_URI}", Is.EqualTo(e.Message));
+                Assert.That($"Error retrieving contents from the well_known_uri: {Constants.FACTSET_WELL_KNOWN_URI}",
+                    Is.EqualTo(e.Message));
                 Assert.That(e, Is.InstanceOf<WellKnownUriException>());
             }
         }
-        
+
         [Test]
         public async Task CreateAsync_PassingValidConfigPathValidConfigInvalidUri_ThrowsWellKnownUriContentException()
         {
@@ -268,7 +276,7 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                 Assert.Throws<WellKnownUriContentException>(() => throw e);
             }
         }
-        
+
         [Test]
         public async Task CreateAsync_PassingValidConfigPathValidConfigJSON_InitialisesWithNoException()
         {
@@ -278,7 +286,7 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                     Path.Join(_resourcesPath, "validConfig.json"),
                     httpClient: _testHttpClientValidRes
                 );
-        
+
                 Assert.That(confidentialClient, Is.InstanceOf<ConfidentialClient>());
             }
             catch (Exception)
@@ -286,31 +294,33 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                 Assert.Fail();
             }
         }
-        
+
         [Test]
-        public async Task CreateAsync_InitialiseAndCastConfidentialClientToIOAuth2Client_InitialisesAndCastsSuccessfully()
+        public async Task
+            CreateAsync_InitialiseAndCastConfidentialClientToIOAuth2Client_InitialisesAndCastsSuccessfully()
         {
             ConfidentialClient confidentialClient = await ConfidentialClient.CreateAsync(
                 Path.Join(_resourcesPath, "validConfig.json"),
                 httpClient: _testHttpClientValidRes
             );
-        
+
             Assert.That(confidentialClient, Is.InstanceOf<ConfidentialClient>());
             Assert.That((IOAuth2Client)confidentialClient, Is.InstanceOf<IOAuth2Client>());
         }
-        
+
         [Test]
         public async Task GetAccessTokenAsync_CallingGetAccessTokenWithFailedSigning_RaisesSigningJwsException()
         {
             int expireTime = 100;
-            HttpClient mockClient = CreateMockHttpTokenRequest(Path.Join(_resourcesPath, "exampleResponseWellKnownUri.txt"), expireTime);
-        
+            HttpClient mockClient =
+                CreateMockHttpTokenRequest(Path.Join(_resourcesPath, "exampleResponseWellKnownUri.txt"), expireTime);
+
             // validConfig.txt is a valid config format, but invalid for signing a JWT.
             ConfidentialClient confidentialClient = await ConfidentialClient.CreateAsync(
                 Path.Join(_resourcesPath, "validConfig.txt"),
                 mockClient
             );
-        
+
             try
             {
                 await confidentialClient.GetAccessTokenAsync();
@@ -321,18 +331,19 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                 Assert.Throws<SigningJwsException>(() => throw e);
             }
         }
-        
+
         [Test]
         public async Task GetAccessTokenAsync_CallingGetAccessTokenWithErrorResponse_RaisesAccessTokenException()
         {
-            HttpClient mockClient = CreateErroneousMockHttpTokenRequest(Path.Join(_resourcesPath, "exampleResponseWellKnownUri.txt"));
-        
+            HttpClient mockClient =
+                CreateErroneousMockHttpTokenRequest(Path.Join(_resourcesPath, "exampleResponseWellKnownUri.txt"));
+
             // validConfig.txt is a valid config format, but invalid for signing a JWT.
             ConfidentialClient confidentialClient = await ConfidentialClient.CreateAsync(
                 Path.Join(_resourcesPath, "validConfigGeneratedSample.txt"),
                 mockClient
             );
-        
+
             try
             {
                 await confidentialClient.GetAccessTokenAsync();
@@ -343,70 +354,74 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                 Assert.Throws<AccessTokenException>(() => throw e);
             }
         }
-        
+
         [Test]
         public async Task GetAccessTokenAsync_CallingGetAccessTokenForTheFirstTime_ReturnsNewAccessToken()
         {
             int expireTime = 100;
-            HttpClient mockClient = CreateMockHttpTokenRequest(Path.Join(_resourcesPath, "exampleResponseWellKnownUri.txt"), expireTime);
-        
+            HttpClient mockClient =
+                CreateMockHttpTokenRequest(Path.Join(_resourcesPath, "exampleResponseWellKnownUri.txt"), expireTime);
+
             ConfidentialClient confidentialClient = await ConfidentialClient.CreateAsync(
                 Path.Join(_resourcesPath, "validConfigGeneratedSample.txt"),
                 mockClient
             );
-        
+
             string accessToken = await confidentialClient.GetAccessTokenAsync();
-        
+
             Assert.That("1234", Is.EqualTo(accessToken));
         }
-        
+
         [Test]
         public async Task GetAccessTokenAsync_CallingGetAccessTokenTwiceBeforeExpiration_ReturnsSameAccessToken()
         {
             int expireTime = 100;
-            HttpClient mockClient = CreateMockHttpTokenRequest(Path.Join(_resourcesPath, "exampleResponseWellKnownUri.txt"), expireTime);
-        
+            HttpClient mockClient =
+                CreateMockHttpTokenRequest(Path.Join(_resourcesPath, "exampleResponseWellKnownUri.txt"), expireTime);
+
             ConfidentialClient confidentialClient = await ConfidentialClient.CreateAsync(
                 Path.Join(_resourcesPath, "validConfigGeneratedSample.txt"),
                 mockClient
             );
-        
+
             string accessToken = await confidentialClient.GetAccessTokenAsync();
-        
+
             Assert.That("1234", Is.EqualTo(accessToken));
-        
+
             // Called immediately after the first `GetAccessToken` call, so its within expiration.
             accessToken = await confidentialClient.GetAccessTokenAsync();
-        
+
             Assert.That("1234", Is.EqualTo(accessToken));
         }
-        
+
         [Test]
-        public async Task GetAccessTokenAsync_CallingGetAccessTokenBeforeAndAfterExpiration_ReturnsDifferentAccessTokens()
+        public async Task
+            GetAccessTokenAsync_CallingGetAccessTokenBeforeAndAfterExpiration_ReturnsDifferentAccessTokens()
         {
             int expireTime = 0;
-            HttpClient mockClient = CreateMockHttpTokenRequest(Path.Join(_resourcesPath, "exampleResponseWellKnownUri.txt"), expireTime);
-        
+            HttpClient mockClient =
+                CreateMockHttpTokenRequest(Path.Join(_resourcesPath, "exampleResponseWellKnownUri.txt"), expireTime);
+
             ConfidentialClient confidentialClient = await ConfidentialClient.CreateAsync(
                 Path.Join(_resourcesPath, "validConfigGeneratedSample.txt"),
                 mockClient
             );
-        
+
             string accessToken = await confidentialClient.GetAccessTokenAsync();
-        
+
             Assert.That("1234", Is.EqualTo(accessToken));
-        
+
             // Called after a zero expiration.
             accessToken = await confidentialClient.GetAccessTokenAsync();
-        
+
             Assert.That("4321", Is.EqualTo(accessToken));
         }
-        
+
         [Test]
         public async Task GetAccessTokenAsync_CallingGetAccessTokenWithFailedResponse_ThrowAccessTokenException()
         {
             string wellKnownUriJson = GetJsonFromFile(Path.Join(_resourcesPath, "exampleResponseWellKnownUri.txt"));
-        
+
             var mockHandler = new Mock<HttpClientHandler>(MockBehavior.Strict);
             mockHandler
                 .Protected()
@@ -415,7 +430,7 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                     ItExpr.Is<HttpRequestMessage>(r => r.Method == HttpMethod.Post),
                     ItExpr.IsAny<CancellationToken>())
                 .Throws(new Exception());
-        
+
             mockHandler
                 .Protected()
                 .Setup<Task<HttpResponseMessage>>(
@@ -424,19 +439,18 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                     ItExpr.IsAny<CancellationToken>())
                 .ReturnsAsync(new HttpResponseMessage()
                 {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent(wellKnownUriJson)
+                    StatusCode = HttpStatusCode.OK, Content = new StringContent(wellKnownUriJson)
                 });
-        
+
             var testHttpClient = new HttpClient(mockHandler.Object);
-        
+
             try
             {
                 ConfidentialClient confidentialClient = await ConfidentialClient.CreateAsync(
                     Path.Join(_resourcesPath, "validConfigGeneratedSample.txt"),
                     httpClient: testHttpClient
                 );
-        
+
                 await confidentialClient.GetAccessTokenAsync();
             }
             catch (Exception e)
@@ -460,8 +474,7 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                     ItExpr.IsAny<CancellationToken>())
                 .ReturnsAsync(new HttpResponseMessage()
                 {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent(json)
+                    StatusCode = HttpStatusCode.OK, Content = new StringContent(json)
                 });
 
             return new HttpClient(mockHandler.Object);
@@ -488,8 +501,7 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                     ItExpr.IsAny<CancellationToken>())
                 .ReturnsAsync(new HttpResponseMessage()
                 {
-                    StatusCode = HttpStatusCode.NotFound,
-                    Content = new StringContent(wellKnownUriJson)
+                    StatusCode = HttpStatusCode.NotFound, Content = new StringContent(wellKnownUriJson)
                 });
 
             return new HttpClient(mockHandler.Object);
@@ -509,12 +521,14 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                 .ReturnsAsync(new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent($"{{\"access_token\":\"1234\",\"token_type\":\"Bearer\",\"expires_in\":\"{expireTime}\"}}")
+                    Content = new StringContent(
+                        $"{{\"access_token\":\"1234\",\"token_type\":\"Bearer\",\"expires_in\":\"{expireTime}\"}}")
                 })
                 .ReturnsAsync(new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent($"{{\"access_token\":\"4321\",\"token_type\":\"Bearer\",\"expires_in\":\"{expireTime}\"}}")
+                    Content = new StringContent(
+                        $"{{\"access_token\":\"4321\",\"token_type\":\"Bearer\",\"expires_in\":\"{expireTime}\"}}")
                 });
 
             mockHandler
@@ -525,8 +539,7 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                     ItExpr.IsAny<CancellationToken>())
                 .ReturnsAsync(new HttpResponseMessage()
                 {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent(wellKnownUriJson)
+                    StatusCode = HttpStatusCode.OK, Content = new StringContent(wellKnownUriJson)
                 });
 
             return new HttpClient(mockHandler.Object);
@@ -552,4 +565,3 @@ namespace FactSet.SDK.Utils.Tests.Authentication
         }
     }
 }
-
