@@ -439,7 +439,8 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                     ItExpr.IsAny<CancellationToken>())
                 .ReturnsAsync(new HttpResponseMessage()
                 {
-                    StatusCode = HttpStatusCode.OK, Content = new StringContent(wellKnownUriJson)
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(wellKnownUriJson)
                 });
 
             var testHttpClient = new HttpClient(mockHandler.Object);
@@ -474,7 +475,8 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                     ItExpr.IsAny<CancellationToken>())
                 .ReturnsAsync(new HttpResponseMessage()
                 {
-                    StatusCode = HttpStatusCode.OK, Content = new StringContent(json)
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(json)
                 });
 
             return new HttpClient(mockHandler.Object);
@@ -501,7 +503,8 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                     ItExpr.IsAny<CancellationToken>())
                 .ReturnsAsync(new HttpResponseMessage()
                 {
-                    StatusCode = HttpStatusCode.NotFound, Content = new StringContent(wellKnownUriJson)
+                    StatusCode = HttpStatusCode.NotFound,
+                    Content = new StringContent(wellKnownUriJson)
                 });
 
             return new HttpClient(mockHandler.Object);
@@ -539,7 +542,8 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                     ItExpr.IsAny<CancellationToken>())
                 .ReturnsAsync(new HttpResponseMessage()
                 {
-                    StatusCode = HttpStatusCode.OK, Content = new StringContent(wellKnownUriJson)
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(wellKnownUriJson)
                 });
 
             return new HttpClient(mockHandler.Object);
