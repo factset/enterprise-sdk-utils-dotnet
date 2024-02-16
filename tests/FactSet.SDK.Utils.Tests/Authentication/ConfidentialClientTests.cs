@@ -188,18 +188,18 @@ namespace FactSet.SDK.Utils.Tests.Authentication
             {
                 JsonWebKey jsonWebKey = new JsonWebKey(@"
                     {
-                        'kty': '',
-                        'use': '',
-                        'alg': '',
-                        'kid': '',
-                        'd': '',
-                        'n': '',
-                        'e': '',
-                        'p': '',
-                        'q': '',
-                        'dp': '',
-                        'dq': '',
-                        'qi': ''
+                        ""kty"": """",
+                        ""use"": """",
+                        ""alg"": """",
+                        ""kid"": """",
+                        ""d"": """",
+                        ""n"": """",
+                        ""e"": """",
+                        ""p"": """",
+                        ""q"": """",
+                        ""dp"": """",
+                        ""dq"": """",
+                        ""qi"": """"
                     }");
                 await ConfidentialClient.CreateAsync(
                     new Configuration("test", "test", jsonWebKey),

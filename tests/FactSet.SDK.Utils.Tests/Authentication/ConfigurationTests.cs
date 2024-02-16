@@ -20,33 +20,33 @@ namespace FactSet.SDK.Utils.Tests.Authentication
 
             _validJwk = @"
                 {
-                    'kty': 'test',
-                    'use': 'test',
-                    'alg': 'test',
-                    'kid': 'test',
-                    'd': 'test',
-                    'n': 'test',
-                    'e': 'AQAB',
-                    'p': 'test',
-                    'q': 'test',
-                    'dp': 'test',
-                    'dq': 'test',
-                    'qi': 'test'
+                    ""kty"": ""test"",
+                    ""use"": ""test"",
+                    ""alg"": ""test"",
+                    ""kid"": ""test"",
+                    ""d"": ""test"",
+                    ""n"": ""test"",
+                    ""e"": ""AQAB"",
+                    ""p"": ""test"",
+                    ""q"": ""test"",
+                    ""dp"": ""test"",
+                    ""dq"": ""test"",
+                    ""qi"": ""test""
                 }";
 
             _invalidJwkMissingKty = @"
                 {
-                    'use': 'test',
-                    'alg': 'test',
-                    'kid': 'test',
-                    'd': 'test',
-                    'n': 'test',
-                    'e': 'AQAB',
-                    'p': 'test',
-                    'q': 'test',
-                    'dp': 'test',
-                    'dq': 'test',
-                    'qi': 'test'
+                    ""use"": ""test"",
+                    ""alg"": ""test"",
+                    ""kid"": ""test"",
+                    ""d"": ""test"",
+                    ""n"": ""test"",
+                    ""e"": ""AQAB"",
+                    ""p"": ""test"",
+                    ""q"": ""test"",
+                    ""dp"": ""test"",
+                    ""dq"": ""test"",
+                    ""qi"": ""test""
                 }";
         }
 
