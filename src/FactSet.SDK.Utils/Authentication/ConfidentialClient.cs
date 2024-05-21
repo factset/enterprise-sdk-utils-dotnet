@@ -123,6 +123,9 @@ namespace FactSet.SDK.Utils.Authentication
             {
                 return new HttpClient();
             }
+            
+            httpClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", Constants.USER_AGENT);
+            
             return httpClient;
         }
 

@@ -17,6 +17,7 @@ namespace FactSet.SDK.Utils.Tests.Authentication
         private HttpClient _testHttpClientEmptyRes;
         private HttpClient _testHttpClientValidRes;
         private string _resourcesPath;
+        private static HttpRequestMessage _capturedRequest;
 
         [SetUp]
         public void Setup()
@@ -230,6 +231,20 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                 Assert.That($"'clientId' cannot be null or empty.", Is.EqualTo(e.Message));
                 Assert.Throws<ArgumentException>(() => throw e);
             }
+        }
+
+        [Test]
+        public async Task HttpClient_UserAgent_ContainsCorrectAgent()
+        {
+            HttpClient mockClient =
+                CreateMockHttp(Path.Join(_resourcesPath, "exampleResponseWellKnownUri.txt"));
+
+            ConfidentialClient confidentialClient = await ConfidentialClient.CreateAsync(
+                Path.Join(_resourcesPath, "validConfigGeneratedSample.txt"),
+                mockClient
+            );
+            
+            Assert.That(_capturedRequest.Headers.UserAgent.ToString(), Is.EqualTo(Constants.USER_AGENT));
         }
 
         [Test]
@@ -473,6 +488,7 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                     "SendAsync",
                     ItExpr.Is<HttpRequestMessage>(r => r.Method == HttpMethod.Get),
                     ItExpr.IsAny<CancellationToken>())
+                .Callback<HttpRequestMessage, CancellationToken>((r, c) => _capturedRequest = r)
                 .ReturnsAsync(new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.OK,
