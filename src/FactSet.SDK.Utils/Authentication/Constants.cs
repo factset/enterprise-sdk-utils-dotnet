@@ -30,7 +30,7 @@ namespace FactSet.SDK.Utils.Authentication
 #pragma warning disable S1075 // URIs should not be hardcoded
         public static readonly string FACTSET_WELL_KNOWN_URI = "https://auth.factset.com/.well-known/openid-configuration";
 #pragma warning restore S1075 // URIs should not be hardcoded
-        
+
         private static String GetOSType()
         {
             if (RuntimeInformation.OSDescription.StartsWith("Microsoft Windows"))
