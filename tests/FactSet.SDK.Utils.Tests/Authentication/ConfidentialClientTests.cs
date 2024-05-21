@@ -243,7 +243,7 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                 Path.Join(_resourcesPath, "validConfigGeneratedSample.txt"),
                 mockClient
             );
-            
+
             Assert.That(_capturedRequest.Headers.UserAgent.ToString(), Is.EqualTo(Constants.USER_AGENT));
         }
 
