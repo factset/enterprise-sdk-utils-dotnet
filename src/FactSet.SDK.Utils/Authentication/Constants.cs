@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Runtime.InteropServices;
 
 namespace FactSet.SDK.Utils.Authentication
 {
@@ -21,10 +23,23 @@ namespace FactSet.SDK.Utils.Authentication
             "kty", "alg", "use", "kid", "n", "e", "d", "p", "q", "dp", "dq", "qi"
         }.ToImmutableHashSet();
 
+        public static readonly String USER_AGENT =
+            $"fds-sdk/dotnet/utils/1.0.1 ({GetOSType()}; {RuntimeInformation.FrameworkDescription})";
+
         // Default values
 #pragma warning disable S1075 // URIs should not be hardcoded
         public static readonly string FACTSET_WELL_KNOWN_URI = "https://auth.factset.com/.well-known/openid-configuration";
 #pragma warning restore S1075 // URIs should not be hardcoded
+
+        private static String GetOSType()
+        {
+            if (RuntimeInformation.OSDescription.StartsWith("Microsoft Windows"))
+            {
+                return "Windows";
+            }
+
+            return RuntimeInformation.OSDescription.Split(' ')[0];
+        }
 
     }
 }
