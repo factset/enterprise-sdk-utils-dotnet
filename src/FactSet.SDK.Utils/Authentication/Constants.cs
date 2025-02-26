@@ -24,7 +24,7 @@ namespace FactSet.SDK.Utils.Authentication
         }.ToImmutableHashSet();
 
         public static readonly String USER_AGENT =
-            $"fds-sdk/dotnet/utils/1.0.1 ({GetOSType()}; {RuntimeInformation.FrameworkDescription})";
+            $"fds-sdk/dotnet/utils/1.1.0 ({GetOSType()}; {RuntimeInformation.FrameworkDescription})";
 
         // Default values
 #pragma warning disable S1075 // URIs should not be hardcoded
