@@ -7,7 +7,7 @@ on:
 jobs:
   deploy:
     name: Deploy to package index
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     env:
       API_KEY: ${{ secrets.NUGET_API_KEY }}
       SOURCE_URL: ${{ secrets.NUGET_PUBLISH_URL }}
@@ -21,7 +21,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4.3.1
         with:
-          dotnet-version: '6.x'
+          dotnet-version: "6.x"
 
       - name: Package
         run: dotnet pack --configuration Release
