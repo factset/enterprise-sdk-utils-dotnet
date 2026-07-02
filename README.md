@@ -90,6 +90,7 @@ Classes in the authentication module require OAuth 2.0 client configuration info
     "clientId": "OAuth 2.0 Client ID registered with FactSet's Developer Portal",
     "clientAuthType": "Confidential",
     "owners": ["USERNAME-SERIAL"],
+    "scopes": ["Optional list of OAuth 2.0 scopes to request"],
     "jwk": {
         "kty": "RSA",
         "use": "sig",
@@ -132,6 +133,12 @@ var jwk = new JsonWebKey(@"
     }");
 
 var config = new Configuration("client id", "Confidential", jwk);
+```
+
+The `scopes` field is optional. When provided, the listed [OAuth 2.0 scopes](https://github.com/factset/oauth2-guidelines#client-credentials-flow-1) are requested when fetching an access token; when omitted, the client's default registered scopes are used. Scopes can also be supplied programmatically:
+
+```csharp
+var config = new Configuration("client id", "Confidential", jwk, scopes: new[] { "scope.a", "scope.b" });
 ```
 
 If you're just starting out, you can visit FactSet's Developer Portal to [create a new application](https://developer.factset.com/applications) and download a configuration file in this format.

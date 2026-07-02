@@ -134,6 +134,46 @@ namespace FactSet.SDK.Utils.Tests.Authentication
         }
 
         [Test]
+        public void Configuration_NotPassingScopes_DefaultsToEmptyList()
+        {
+            JsonWebKey jsonWebKey = new(_validJwk);
+            Configuration config = new(clientId: "test", clientAuthType: "test", jwk: jsonWebKey);
+
+            Assert.That(config.Scopes, Is.Not.Null);
+            Assert.That(config.Scopes, Is.Empty);
+        }
+
+        [Test]
+        public void Configuration_PassingScopes_StoresScopes()
+        {
+            JsonWebKey jsonWebKey = new(_validJwk);
+            Configuration config = new(clientId: "test",
+                clientAuthType: "test",
+                jwk: jsonWebKey,
+                wellKnownUri: null,
+                scopes: new[] { "factset.api.a", "factset.api.b" });
+
+            Assert.That(config.Scopes, Is.EqualTo(new[] { "factset.api.a", "factset.api.b" }));
+        }
+
+        [Test]
+        public void Parse_PassingConfigFileWithScopes_ParsesScopes()
+        {
+            Configuration config = Configuration.Parse(Path.Join(_resourcesPath, "validConfigWithScopes.json"));
+
+            Assert.That(config.Scopes, Is.EqualTo(new[] { "factset.api.a", "factset.api.b" }));
+        }
+
+        [Test]
+        public void Parse_PassingConfigFileWithoutScopes_DefaultsToEmptyList()
+        {
+            Configuration config = Configuration.Parse(Path.Join(_resourcesPath, "validConfig.json"));
+
+            Assert.That(config.Scopes, Is.Not.Null);
+            Assert.That(config.Scopes, Is.Empty);
+        }
+
+        [Test]
         public void Parse_PassingNullConfigPath_ThrowsConfigurationException()
         {
             try

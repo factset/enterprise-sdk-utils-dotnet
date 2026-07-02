@@ -33,6 +33,12 @@ namespace FactSet.SDK.Utils.Authentication
         /// </summary>
         /// <returns>The JWK.</returns>
         public JsonWebKey Jwk { get; }
+        /// <summary>
+        /// Gets the OAuth 2.0 scopes to request when fetching an access token. Optional; when empty the
+        /// client's default registered scopes are used.
+        /// </summary>
+        /// <returns>The list of scopes.</returns>
+        public IList<string> Scopes { get; } = new List<string>();
 
         /// <summary>
         /// Creates a valid Configuration instance containing data needed to create a JWT.
@@ -41,13 +47,15 @@ namespace FactSet.SDK.Utils.Authentication
         /// <param name="clientAuthType">The client type as defined in OAuth 2.0 in rfc6749 2.1.</param>
         /// <param name="jwk">The JSON Web Key.</param>
         /// <param name="wellKnownUri">Specifies the well-known URI to retrieve metadata about its authorization server.</param>
+        /// <param name="scopes">The OAuth 2.0 scopes to request when fetching an access token. Optional.</param>
         /// <exception cref="ArgumentException">Raised if any of the Configuration arguments are null or empty.</exception>
         /// <exception cref="ConfigurationException">Raised if there are any missing essential keys in the JWK as well
         /// as if there are any keys with a value that is null or an empty string.</exception>
         public Configuration(string clientId,
                              string clientAuthType,
                              JsonWebKey jwk,
-                             string wellKnownUri = null)
+                             string wellKnownUri = null,
+                             IList<string> scopes = null)
         {
             Trace.TraceInformation("Reviewing configuration format and completeness");
 
@@ -72,6 +80,7 @@ namespace FactSet.SDK.Utils.Authentication
             ClientAuthType = clientAuthType;
             Jwk = jwk;
             WellKnownUri = wellKnownUri ?? WellKnownUri;
+            Scopes = scopes ?? Scopes;
 
             Trace.TraceInformation("Configuration is complete and formatted correctly");
         }
