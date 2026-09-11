@@ -226,9 +226,13 @@ namespace FactSet.SDK.Utils.Authentication
         {
             Trace.TraceInformation("Fetching new access token");
 
+            var scope = _config.Scopes != null && _config.Scopes.Count > 0
+                ? string.Join(" ", _config.Scopes)
+                : null;
+
             lock (_tokenLock)
             {
-                _cachedTokenTask = InitTokenClient().RequestClientCredentialsTokenAsync();
+                _cachedTokenTask = InitTokenClient().RequestClientCredentialsTokenAsync(scope: scope);
             }
 
             // Moved await outside lock to reduce time lock is held for.

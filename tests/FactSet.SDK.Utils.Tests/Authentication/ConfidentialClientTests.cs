@@ -18,6 +18,7 @@ namespace FactSet.SDK.Utils.Tests.Authentication
         private HttpClient _testHttpClientValidRes;
         private string _resourcesPath;
         private static HttpRequestMessage _capturedRequest;
+        private static string _capturedTokenRequestBody;
 
         [SetUp]
         public void Setup()
@@ -476,6 +477,40 @@ namespace FactSet.SDK.Utils.Tests.Authentication
             }
         }
 
+        [Test]
+        public async Task GetAccessTokenAsync_ConfigWithScopes_SendsScopeInTokenRequest()
+        {
+            HttpClient mockClient =
+                CreateScopeCapturingMockHttp(Path.Join(_resourcesPath, "exampleResponseWellKnownUri.txt"));
+
+            ConfidentialClient confidentialClient = await ConfidentialClient.CreateAsync(
+                Path.Join(_resourcesPath, "validConfigWithScopes.json"),
+                mockClient
+            );
+
+            await confidentialClient.GetAccessTokenAsync();
+
+            // Scope is sent space-delimited in the form body; decode '+' and %xx before asserting.
+            string decodedBody = Uri.UnescapeDataString(_capturedTokenRequestBody.Replace("+", " "));
+            Assert.That(decodedBody, Does.Contain("scope=factset.api.a factset.api.b"));
+        }
+
+        [Test]
+        public async Task GetAccessTokenAsync_ConfigWithoutScopes_OmitsScopeFromTokenRequest()
+        {
+            HttpClient mockClient =
+                CreateScopeCapturingMockHttp(Path.Join(_resourcesPath, "exampleResponseWellKnownUri.txt"));
+
+            ConfidentialClient confidentialClient = await ConfidentialClient.CreateAsync(
+                Path.Join(_resourcesPath, "validConfigGeneratedSample.txt"),
+                mockClient
+            );
+
+            await confidentialClient.GetAccessTokenAsync();
+
+            Assert.That(_capturedTokenRequestBody, Does.Not.Contain("scope="));
+        }
+
         // Helper method for creating a mock http with different responses
         private static HttpClient CreateMockHttp(string getAsyncResponseFilePath)
         {
@@ -548,6 +583,43 @@ namespace FactSet.SDK.Utils.Tests.Authentication
                     StatusCode = HttpStatusCode.OK,
                     Content = new StringContent(
                         $"{{\"access_token\":\"4321\",\"token_type\":\"Bearer\",\"expires_in\":\"{expireTime}\"}}")
+                });
+
+            mockHandler
+                .Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.Is<HttpRequestMessage>(r => r.Method == HttpMethod.Get),
+                    ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(new HttpResponseMessage()
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(wellKnownUriJson)
+                });
+
+            return new HttpClient(mockHandler.Object);
+        }
+
+        // Captures the token POST request body so tests can assert on the OAuth scope parameter.
+        private static HttpClient CreateScopeCapturingMockHttp(string wellKnownUriPath)
+        {
+            string wellKnownUriJson = GetJsonFromFile(wellKnownUriPath);
+            _capturedTokenRequestBody = null;
+
+            var mockHandler = new Mock<HttpClientHandler>(MockBehavior.Strict);
+            mockHandler
+                .Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.Is<HttpRequestMessage>(r => r.Method == HttpMethod.Post),
+                    ItExpr.IsAny<CancellationToken>())
+                .Callback<HttpRequestMessage, CancellationToken>(
+                    (r, c) => _capturedTokenRequestBody = r.Content.ReadAsStringAsync().Result)
+                .ReturnsAsync(new HttpResponseMessage()
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(
+                        "{\"access_token\":\"1234\",\"token_type\":\"Bearer\",\"expires_in\":\"100\"}")
                 });
 
             mockHandler
