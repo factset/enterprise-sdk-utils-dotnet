@@ -25,7 +25,7 @@ jobs:
           dotnet-version: "6.x"
 
       - name: Package
-        run: dotnet pack src/FactSet.SDK.Utils/FactSet.SDK.Utils.csproj --configuration Release --output out
+        run: dotnet pack --configuration Release
 
       # Exchanges this job's OIDC token for a 1-hour nuget.org API key.
       - name: NuGet login (OIDC -> temporary API key)
@@ -37,4 +37,4 @@ jobs:
       - name: Publish
         env:
           NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
-        run: dotnet nuget push "out/*.nupkg" --api-key "$NUGET_API_KEY" --source https://api.nuget.org/v3/index.json
+        run: dotnet nuget push --source https://api.nuget.org/v3/index.json --api-key "$NUGET_API_KEY" **/*.nupkg
